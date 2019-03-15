@@ -1,0 +1,75 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'docker'
+
+group = 'com.keycloakapp'
+//version = '0.0.1-SNAPSHOT'
+
+description = """service"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2"}
+
+}
+dependencies {
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.1.3.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.1.3.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jersey', version: '2.1.2.RELEASE'
+    compile group: 'org.keycloak', name: 'keycloak-spring-boot-2-starter', version: '4.0.0.Final'
+    providedCompile('org.springframework.boot:spring-boot-starter-tomcat')
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.2.RELEASE'
+
+}
+
+task buildDocker (type:Docker, dependsOn: build) {
+    applicationName = "service"
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from "${project.buildDir}/libs/service.war"
+            into stageDir
+        }
+    }
+}
+//task buildDocker (type:Docker, dependsOn: build) {
+//    applicationName = "service"
+//    dockerfile = file('Dockerfile')
+//    doFirst {
+//        copy {
+//            from "${project.projectDir}/restMovieService/src/test/com.keycloakapp.demo/DemoApplicationTests.java"
+//            into stageDir
+//        }
+//    }
+//}
+task stopDockerContainer (type:Exec, dependsOn: buildDocker) {
+    commandLine "docker", "stop", "service"
+}
+task removeDockerContainer (type:Exec, dependsOn:stopDockerContainer){
+    commandLine "docker", "rm", "service"
+}
+task runDocker(type: Exec, dependsOn: buildDocker){
+    dependsOn removeDockerContainer
+    commandLine "docker", "run", "--name", "service", "--restart=always", "-p", "8081:8081", "com.keycloakapp/service"
+}
