@@ -15,6 +15,13 @@ pipeline {
             }
 
         }
+		stage ('Docker test') {
+            steps {
+                script {
+                    bat 'gradle buildDocker'
+                }
+            }
+        }
         stage ('Unit test') {
         // returnStatus: true here will ensure the build stays yellow
         // when test cases are failing
