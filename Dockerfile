@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine
-WORKDIR /.
+# WORKDIR /.
 # VOLUME /docker
 RUN mkdir -p /app
 COPY ./service.war /app/service.war
