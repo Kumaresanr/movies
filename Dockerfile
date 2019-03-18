@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
-# WORKDIR /.
-# VOLUME /docker
+WORKDIR /.
+VOLUME /docker
 RUN mkdir -p /app
 COPY ./service.war /app/service.war
 ENTRYPOINT ["java", "-jar", "/app/service.war"]
