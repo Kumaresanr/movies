@@ -5,10 +5,11 @@
 # COPY ./service.war /app/service.war
 # ENTRYPOINT ["java", "-jar", "/app/service.war"]
 FROM openjdk:8-jdk-alpine
+WORKDIR /.
 VOLUME /tmp
-ARG JAR_FILE
-COPY ${JAR_FILE} service.war
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/service.war"]
+RUN mkdir -p /app
+COPY ./build/libs /app/
+ENTRYPOINT ["java", "-jar", "/app/service.war"]
 
 #FROM openjdk:8-jdk-alpine
 #WORKDIR /.
