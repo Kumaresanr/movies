@@ -29,7 +29,7 @@ pipeline {
 	stage ('Docker test') {
             steps {
                 script {
-                    bat 'docker build . -t com.keycloakapp/service'
+                    bat 'gradlew runDocker'
                 }
             }
         }
