@@ -15,7 +15,7 @@ pipeline {
             }
 
         }
-        stage ('Unit test') {
+        stage('Unit test') {
             steps {
                 script {
                      if (isUnix()) {
@@ -26,14 +26,14 @@ pipeline {
                   }
             }
         }
-	stage ('Docker test') {
+	stage('Docker test') {
             steps {
                 script {
                     bat 'docker build . -t com.keycloakapp/service'
                 }
             }
         }
-	stage ('Docker run')
+	stage('Docker run') {
 	    steps {
 		    script {
 			    bat 'docker run --name testDocker --restart=always -p 8082:8082 com.keycloakapp/service' 
@@ -64,4 +64,4 @@ pipeline {
             }
         }
     }
-
+}
