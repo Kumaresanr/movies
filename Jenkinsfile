@@ -8,7 +8,7 @@ pipeline {
                 if (isUnix()) {
                     sh './gradlew clean build'
                      } else {
-                        bat 'gradlew clean build'
+                        bat 'gradlew clean build -DskipTests=true'
                       }
                   }
 
