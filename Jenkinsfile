@@ -29,17 +29,10 @@ pipeline {
 	stage('Docker test') {
             steps {
                 script {
-                    bat 'docker build . -t com.keycloakapp/service'
+                    bat 'gradle clean build && docker build . -t com.keycloakapp/service'
                 }
             }
         }
-	//stage('Docker run') {
-	    //steps {
-		    //script {
-			 //   bat 'docker run --name testDocker --restart=always -p 8082:8082 com.keycloakapp/service' 
-		   // }
-	 //   }
-    //	}
         stage('Packaging') {
             steps{
                 script{
