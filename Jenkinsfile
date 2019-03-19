@@ -33,13 +33,13 @@ pipeline {
                 }
             }
         }
-	stage('Docker run') {
-	    steps {
-		    script {
-			    bat 'docker run --name testDocker --restart=always -p 8082:8082 com.keycloakapp/service' 
-		    }
-	    }
-    	}
+	//stage('Docker run') {
+	    //steps {
+		    //script {
+			 //   bat 'docker run --name testDocker --restart=always -p 8082:8082 com.keycloakapp/service' 
+		   // }
+	 //   }
+    //	}
         stage('Packaging') {
             steps{
                 script{
